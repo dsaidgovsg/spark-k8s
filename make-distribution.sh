@@ -24,13 +24,14 @@ PYSPARK_INSTALL_FLAG=$(if [ "${WITH_PYSPARK}" = "true" ]; then echo "--pip"; fi)
 
 pushd spark >/dev/null
 
+# The build is very verbose and exceeds max log length, need to reduce using awk
 ./dev/make-distribution.sh \
     ${PYSPARK_INSTALL_FLAG} --name spark-${SPARK_VERSION}_hadoop-${HADOOP_VERSION} \
     -Phadoop-$(echo ${HADOOP_VERSION} | cut -c 1-3) \
     -Dhadoop.version=${HADOOP_VERSION} \
     -Pkubernetes \
     ${HIVE_INSTALL_FLAG} \
-    -DskipTests
+    -DskipTests | awk 'NR % 50 == 0'
 
 # Replace Hive for Hadoop 3 since Hive 1.2.1 does not officially support Hadoop 3
 # Note docker-image-tool.sh takes the jars from assembly/target/scala-2.11/jars
