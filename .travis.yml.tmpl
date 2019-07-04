@@ -16,9 +16,15 @@ matrix:
     - WITH_HIVE={{ v.with_hive }}
     - WITH_PYSPARK={{ v.with_pyspark }}
 {%- endfor %}
+
+before_install:
+- sudo apt-get install --no-install-recommends -y python python-setuptools
+addons:
+  apt:
+    update: true
   
 script:
-- sudo bash make-distribution.sh
+- bash make-distribution.sh
 
 deploy:
   provider: script

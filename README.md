@@ -12,3 +12,8 @@ Additionally, all the built images are currently built with Hadoop and Hive
 support, and images that are using Hadoop 3 are automatically applied with
 unofficial patch for Hive JAR to make it work with Hadoop 3. The unofficial
 patch can be found [here](https://github.com/guangie88/hive-exec-jar).
+
+## Note
+
+For the build, if `WITH_PYSPARK` is set to `true`, then `python` and
+`python-setuptools` should be `apt` installed.

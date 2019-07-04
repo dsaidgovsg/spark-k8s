@@ -19,11 +19,6 @@ else
     popd >/dev/null
 fi
 
-# For building Pyspark component
-apt-get install -y --no-install-recommends \
-    python \
-    python-setuptools
-
 HIVE_INSTALL_FLAG=$(if [ "${WITH_HIVE}" = "true" ]; then echo "-Phive"; fi)
 PYSPARK_INSTALL_FLAG=$(if [ "${WITH_PYSPARK}" = "true" ]; then echo "--pip"; fi)
 
