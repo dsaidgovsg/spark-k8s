@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -euox pipefail
+
+DOCKER_REPO=guangie88/spark-k8s
+
+if ! which git >/dev/null; then
+    >&2 echo "Cannot find git in PATH!"
+    exit 1
+fi
+
+# Get the Spark source files set-up ready
+if [ ! -d "spark" ] ; then
+    git clone https://github.com/apache/spark.git -b v${SPARK_VERSION}
+else
+    pushd spark >/dev/null
+    git reset --hard
+    git checkout v${SPARK_VERSION}
+    popd >/dev/null
+fi
+
+# For building Pyspark component
+apt-get install -y --no-install-recommends \
+    python \
+    python-setuptools
+
+HIVE_INSTALL_FLAG=$(if [ "${WITH_HIVE}" = "true" ]; then echo "-Phive"; fi)
+PYSPARK_INSTALL_FLAG=$(if [ "${WITH_PYSPARK}" = "true" ]; then echo "--pip"; fi)
+
+pushd spark >/dev/null
+
+./dev/make-distribution.sh \
+    ${PYSPARK_INSTALL_FLAG} --name spark-${SPARK_VERSION}_hadoop-${HADOOP_VERSION} \
+    -Phadoop-$(echo ${HADOOP_VERSION} | cut -c 1-3) \
+    -Dhadoop.version=${HADOOP_VERSION} \
+    -Pkubernetes \
+    ${HIVE_INSTALL_FLAG} \
+    -DskipTests
+
+# There is no way to rename the Docker image, so we just retag later
+./bin/docker-image-tool.sh -r ${DOCKER_REPO} -t ${SPARK_VERSION}_hadoop-${HADOOP_VERSION} build
+
+docker tag "${DOCKER_REPO}/spark:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}"
+docker tag "${DOCKER_REPO}/spark-r:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-r:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}"
+docker tag "${DOCKER_REPO}/spark-py:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-py:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}"
+
+popd >/dev/null
