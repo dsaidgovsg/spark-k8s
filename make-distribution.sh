@@ -2,6 +2,7 @@
 set -euox pipefail
 
 DOCKER_REPO=${DOCKER_REPO:-guangie88/spark-k8s}
+HIVE_HADOOP3_HIVE_EXEC_URL=${HIVE_HADOOP3_HIVE_EXEC_URL:-https://github.com/guangie88/hive-exec-jar/releases/download/1.2.1.spark2-hadoop3/hive-exec-1.2.1.spark2.jar}
 
 if ! which git >/dev/null; then
     >&2 echo "Cannot find git in PATH!"
@@ -35,6 +36,13 @@ pushd spark >/dev/null
     -Pkubernetes \
     ${HIVE_INSTALL_FLAG} \
     -DskipTests
+
+# Replace Hive for Hadoop 3 since Hive 1.2.1 does not officially support Hadoop 3
+# Note docker-image-tool.sh takes the jars from assembly/target/scala-2.11/jars
+if [ "${WITH_HIVE}" = "true" ] && [ "$(echo ${HADOOP_VERSION} | cut -c 1)" = "3" ]; then
+    (cd assembly/target/scala-2.11/jars && curl -LO ${HIVE_HADOOP3_HIVE_EXEC_URL})
+    (cp assembly/target/scala-2.11/jars/hive-exec-1.2.1.spark2.jar dist/jars/)
+fi
 
 # There is no way to rename the Docker image, so we simply retag
 ./bin/docker-image-tool.sh -r ${DOCKER_REPO} -t ${SPARK_VERSION}_hadoop-${HADOOP_VERSION} build
