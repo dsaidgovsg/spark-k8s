@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euox pipefail
 
-DOCKER_REPO=guangie88/spark-k8s
+DOCKER_REPO=${DOCKER_REPO:-guangie88/spark-k8s}
 
 if ! which git >/dev/null; then
     >&2 echo "Cannot find git in PATH!"
@@ -36,7 +36,7 @@ pushd spark >/dev/null
     ${HIVE_INSTALL_FLAG} \
     -DskipTests
 
-# There is no way to rename the Docker image, so we just retag later
+# There is no way to rename the Docker image, so we simply retag
 ./bin/docker-image-tool.sh -r ${DOCKER_REPO} -t ${SPARK_VERSION}_hadoop-${HADOOP_VERSION} build
 
 docker tag "${DOCKER_REPO}/spark:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}"
