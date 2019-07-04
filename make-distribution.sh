@@ -31,7 +31,7 @@ pushd spark >/dev/null
     -Dhadoop.version=${HADOOP_VERSION} \
     -Pkubernetes \
     ${HIVE_INSTALL_FLAG} \
-    -DskipTests | awk 'NR % 50 == 0'
+    -DskipTests | awk 'NR % 10 == 0'
 
 # Replace Hive for Hadoop 3 since Hive 1.2.1 does not officially support Hadoop 3
 # Note docker-image-tool.sh takes the jars from assembly/target/scala-2.11/jars
