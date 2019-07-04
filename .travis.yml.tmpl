@@ -4,6 +4,8 @@ env:
   global:
   - DOCKER_REPO=${DOCKER_USERNAME}/spark-k8s
 
+sudo: required
+
 matrix:
   include:
 {%- for v in c.versions %}
@@ -16,7 +18,7 @@ matrix:
 {%- endfor %}
   
 script:
-- bash make-distribution.sh
+- sudo bash make-distribution.sh
 
 deploy:
   provider: script

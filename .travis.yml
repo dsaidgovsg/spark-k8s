@@ -4,6 +4,8 @@ env:
   global:
   - DOCKER_REPO=${DOCKER_USERNAME}/spark-k8s
 
+sudo: required
+
 matrix:
   include:
   - services: docker
@@ -14,7 +16,7 @@ matrix:
     - WITH_PYSPARK=true
   
 script:
-- bash make-distribution.sh
+- sudo bash make-distribution.sh
 
 deploy:
   provider: script
