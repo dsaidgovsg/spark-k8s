@@ -1,0 +1,40 @@
+language: java
+
+jdk:
+- oraclejdk8
+
+sudo: required
+
+env:
+  global:
+  - DOCKER_REPO=${DOCKER_USERNAME}/spark-k8s
+
+matrix:
+  include:
+{%- for v in c.versions %}
+  - services: docker
+    env:
+    - SPARK_VERSION={{ v.spark }}
+    - HADOOP_VERSION={{ v.hadoop }}
+    - WITH_HIVE={{ v.with_hive }}
+    - WITH_PYSPARK={{ v.with_pyspark }}
+{%- endfor %}
+
+before_install:
+- sudo apt-get install --no-install-recommends -y python python-setuptools
+addons:
+  apt:
+    update: true
+  
+script:
+- bash make-distribution.sh
+
+deploy:
+  provider: script
+  script: bash push-images.sh
+  # on:
+  #   branch: master
+
+branches:
+  only:
+  - master
