@@ -17,6 +17,72 @@ matrix:
     - HADOOP_VERSION=3.1.0
     - WITH_HIVE=true
     - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.3
+    - HADOOP_VERSION=2.7.3
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.2
+    - HADOOP_VERSION=3.1.0
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.2
+    - HADOOP_VERSION=2.7.3
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.1
+    - HADOOP_VERSION=3.1.0
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.1
+    - HADOOP_VERSION=2.7.3
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.0
+    - HADOOP_VERSION=3.1.0
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.0
+    - HADOOP_VERSION=2.7.3
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.3.3
+    - HADOOP_VERSION=2.7.3
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.3.2
+    - HADOOP_VERSION=2.7.3
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.3.1
+    - HADOOP_VERSION=2.7.3
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.3.0
+    - HADOOP_VERSION=2.7.3
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
 
 before_install:
 - sudo apt-get install --no-install-recommends -y python python-setuptools
@@ -30,8 +96,8 @@ script:
 deploy:
   provider: script
   script: bash push-images.sh
-  # on:
-  #   branch: master
+  on:
+    branch: master
 
 branches:
   only:

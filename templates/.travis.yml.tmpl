@@ -32,8 +32,8 @@ script:
 deploy:
   provider: script
   script: bash push-images.sh
-  # on:
-  #   branch: master
+  on:
+    branch: master
 
 branches:
   only:
