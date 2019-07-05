@@ -13,61 +13,7 @@ matrix:
   include:
   - services: docker
     env:
-    - SPARK_VERSION=2.4.3
-    - HADOOP_VERSION=3.1.0
-    - WITH_HIVE=true
-    - WITH_PYSPARK=true
-  - services: docker
-    env:
-    - SPARK_VERSION=2.4.3
-    - HADOOP_VERSION=2.7.3
-    - WITH_HIVE=true
-    - WITH_PYSPARK=true
-  - services: docker
-    env:
-    - SPARK_VERSION=2.4.2
-    - HADOOP_VERSION=3.1.0
-    - WITH_HIVE=true
-    - WITH_PYSPARK=true
-  - services: docker
-    env:
-    - SPARK_VERSION=2.4.2
-    - HADOOP_VERSION=2.7.3
-    - WITH_HIVE=true
-    - WITH_PYSPARK=true
-  - services: docker
-    env:
-    - SPARK_VERSION=2.4.1
-    - HADOOP_VERSION=3.1.0
-    - WITH_HIVE=true
-    - WITH_PYSPARK=true
-  - services: docker
-    env:
-    - SPARK_VERSION=2.4.1
-    - HADOOP_VERSION=2.7.3
-    - WITH_HIVE=true
-    - WITH_PYSPARK=true
-  - services: docker
-    env:
-    - SPARK_VERSION=2.4.0
-    - HADOOP_VERSION=3.1.0
-    - WITH_HIVE=true
-    - WITH_PYSPARK=true
-  - services: docker
-    env:
-    - SPARK_VERSION=2.4.0
-    - HADOOP_VERSION=2.7.3
-    - WITH_HIVE=true
-    - WITH_PYSPARK=true
-  - services: docker
-    env:
-    - SPARK_VERSION=2.3.3
-    - HADOOP_VERSION=2.7.3
-    - WITH_HIVE=true
-    - WITH_PYSPARK=true
-  - services: docker
-    env:
-    - SPARK_VERSION=2.3.2
+    - SPARK_VERSION=2.3.0
     - HADOOP_VERSION=2.7.3
     - WITH_HIVE=true
     - WITH_PYSPARK=true
@@ -79,8 +25,62 @@ matrix:
     - WITH_PYSPARK=true
   - services: docker
     env:
-    - SPARK_VERSION=2.3.0
+    - SPARK_VERSION=2.3.2
     - HADOOP_VERSION=2.7.3
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.3.3
+    - HADOOP_VERSION=2.7.3
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.0
+    - HADOOP_VERSION=2.7.3
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.0
+    - HADOOP_VERSION=3.1.0
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.1
+    - HADOOP_VERSION=2.7.3
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.1
+    - HADOOP_VERSION=3.1.0
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.2
+    - HADOOP_VERSION=2.7.3
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.2
+    - HADOOP_VERSION=3.1.0
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.3
+    - HADOOP_VERSION=2.7.3
+    - WITH_HIVE=true
+    - WITH_PYSPARK=true
+  - services: docker
+    env:
+    - SPARK_VERSION=2.4.3
+    - HADOOP_VERSION=3.1.0
     - WITH_HIVE=true
     - WITH_PYSPARK=true
 
@@ -91,7 +91,7 @@ addons:
     update: true
   
 script:
-- travis_wait 30 bash make-distribution.sh
+- bash make-distribution.sh
 
 deploy:
   provider: script

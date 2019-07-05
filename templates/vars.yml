@@ -1,50 +1,5 @@
 versions:
-- spark:  2.4.3
-  hadoop: 3.1.0
-  with_hive: "true"
-  with_pyspark: "true"
-
-- spark:  2.4.3
-  hadoop: 2.7.3
-  with_hive: "true"
-  with_pyspark: "true"
-
-- spark:  2.4.2
-  hadoop: 3.1.0
-  with_hive: "true"
-  with_pyspark: "true"
-
-- spark:  2.4.2
-  hadoop: 2.7.3
-  with_hive: "true"
-  with_pyspark: "true"
-
-- spark:  2.4.1
-  hadoop: 3.1.0
-  with_hive: "true"
-  with_pyspark: "true"
-
-- spark:  2.4.1
-  hadoop: 2.7.3
-  with_hive: "true"
-  with_pyspark: "true"
-
-- spark:  2.4.0
-  hadoop: 3.1.0
-  with_hive: "true"
-  with_pyspark: "true"
-
-- spark:  2.4.0
-  hadoop: 2.7.3
-  with_hive: "true"
-  with_pyspark: "true"
-
-- spark:  2.3.3
-  hadoop: 2.7.3
-  with_hive: "true"
-  with_pyspark: "true"
-
-- spark:  2.3.2
+- spark:  2.3.0
   hadoop: 2.7.3
   with_hive: "true"
   with_pyspark: "true"
@@ -54,7 +9,52 @@ versions:
   with_hive: "true"
   with_pyspark: "true"
 
-- spark:  2.3.0
+- spark:  2.3.2
   hadoop: 2.7.3
+  with_hive: "true"
+  with_pyspark: "true"
+
+- spark:  2.3.3
+  hadoop: 2.7.3
+  with_hive: "true"
+  with_pyspark: "true"
+
+- spark:  2.4.0
+  hadoop: 2.7.3
+  with_hive: "true"
+  with_pyspark: "true"
+
+- spark:  2.4.0
+  hadoop: 3.1.0
+  with_hive: "true"
+  with_pyspark: "true"
+
+- spark:  2.4.1
+  hadoop: 2.7.3
+  with_hive: "true"
+  with_pyspark: "true"
+
+- spark:  2.4.1
+  hadoop: 3.1.0
+  with_hive: "true"
+  with_pyspark: "true"
+
+- spark:  2.4.2
+  hadoop: 2.7.3
+  with_hive: "true"
+  with_pyspark: "true"
+
+- spark:  2.4.2
+  hadoop: 3.1.0
+  with_hive: "true"
+  with_pyspark: "true"
+
+- spark:  2.4.3
+  hadoop: 2.7.3
+  with_hive: "true"
+  with_pyspark: "true"
+
+- spark:  2.4.3
+  hadoop: 3.1.0
   with_hive: "true"
   with_pyspark: "true"
