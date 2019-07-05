@@ -91,7 +91,7 @@ addons:
     update: true
   
 script:
-- bash make-distribution.sh
+- travis_wait 30 bash make-distribution.sh
 
 deploy:
   provider: script
