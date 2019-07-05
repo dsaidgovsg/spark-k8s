@@ -27,13 +27,13 @@ addons:
     update: true
   
 script:
-- bash make-distribution.sh
+- travis_wait 60 bash make-distribution.sh
 
 deploy:
   provider: script
   script: bash push-images.sh
-  # on:
-  #   branch: master
+  on:
+    branch: master
 
 branches:
   only:

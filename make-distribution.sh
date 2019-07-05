@@ -31,7 +31,7 @@ pushd spark >/dev/null
     -Dhadoop.version=${HADOOP_VERSION} \
     -Pkubernetes \
     ${HIVE_INSTALL_FLAG} \
-    -DskipTests | awk 'NR % 50 == 0'
+    -DskipTests | awk 'NR % 10 == 0'
 
 # Replace Hive for Hadoop 3 since Hive 1.2.1 does not officially support Hadoop 3
 # Note docker-image-tool.sh takes the jars from assembly/target/scala-2.11/jars
@@ -44,7 +44,11 @@ fi
 ./bin/docker-image-tool.sh -r ${DOCKER_REPO} -t ${SPARK_VERSION}_hadoop-${HADOOP_VERSION} build
 
 docker tag "${DOCKER_REPO}/spark:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}"
-docker tag "${DOCKER_REPO}/spark-r:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-r:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}"
-docker tag "${DOCKER_REPO}/spark-py:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-py:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}"
+
+SPARK_XY_VERSION="$(echo ${SPARK_VERSION} | cut -c 1-3)"
+if [ "${SPARK_XY_VERSION}" != "2.3" ]; then # >= 2.4
+    docker tag "${DOCKER_REPO}/spark-r:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-r:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}"
+    docker tag "${DOCKER_REPO}/spark-py:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-py:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}"
+fi
 
 popd >/dev/null
