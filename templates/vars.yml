@@ -1,4 +1,9 @@
 versions:
+- spark: "master"
+  hadoop: 3.1.0
+  with_hive: "true"
+  with_pyspark: "true"
+
 - spark:  2.3.0
   hadoop: 2.7.3
   with_hive: "true"
