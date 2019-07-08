@@ -40,10 +40,11 @@ pushd spark >/dev/null
     -DskipTests | awk 'NR % 10 == 0'
 
 # Replace Hive for Hadoop 3 since Hive 1.2.1 does not officially support Hadoop 3
-# Note docker-image-tool.sh takes the jars from assembly/target/scala-2.11/jars
+# Note docker-image-tool.sh takes the jars from assembly/target/scala-2.*/jars
 if [ "${WITH_HIVE}" = "true" ] && [ "$(echo ${HADOOP_VERSION} | cut -c 1)" = "3" ]; then
-    (cd assembly/target/scala-2.11/jars && curl -LO ${HIVE_HADOOP3_HIVE_EXEC_URL})
-    (cp assembly/target/scala-2.11/jars/hive-exec-1.2.1.spark2.jar dist/jars/)
+    JARS_DIR="$(find assembly -type d -name 'scala-2.*')"
+    (cd ${JARS_DIR} && curl -LO ${HIVE_HADOOP3_HIVE_EXEC_URL})
+    (cp ${JARS_DIR}/hive-exec-1.2.1.spark2.jar dist/jars/)
 fi
 
 GIT_REV="$(git rev-parse HEAD | cut -c 1-7)"
