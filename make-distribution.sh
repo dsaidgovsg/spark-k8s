@@ -9,13 +9,19 @@ if ! which git >/dev/null; then
     exit 1
 fi
 
+if [ "${SPARK_VERSION}" = "master" ]; then
+    SPARK_VERSION_TAG="master"
+else
+    SPARK_VERSION_TAG="v${SPARK_VERSION}"
+fi
+
 # Get the Spark source files set-up ready
 if [ ! -d "spark" ] ; then
-    git clone https://github.com/apache/spark.git -b v${SPARK_VERSION}
+    git clone https://github.com/apache/spark.git -b "${SPARK_VERSION_TAG}"
 else
     pushd spark >/dev/null
     git reset --hard
-    git checkout v${SPARK_VERSION}
+    git checkout "${SPARK_VERSION_TAG}"
     popd >/dev/null
 fi
 
@@ -40,15 +46,22 @@ if [ "${WITH_HIVE}" = "true" ] && [ "$(echo ${HADOOP_VERSION} | cut -c 1)" = "3"
     (cp assembly/target/scala-2.11/jars/hive-exec-1.2.1.spark2.jar dist/jars/)
 fi
 
-# There is no way to rename the Docker image, so we simply retag
-./bin/docker-image-tool.sh -r ${DOCKER_REPO} -t ${SPARK_VERSION}_hadoop-${HADOOP_VERSION} build
+GIT_REV="$(git rev-parse HEAD | cut -c 1-7)"
+if [ "${SPARK_VERSION}" = "master" ]; then
+    SPARK_LABEL="${GIT_REV}"
+else
+    SPARK_LABEL="master-${SPARK_VERSION}"
+fi
 
-docker tag "${DOCKER_REPO}/spark:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}"
+# There is no way to rename the Docker image, so we simply retag
+./bin/docker-image-tool.sh -r ${DOCKER_REPO} -t ${SPARK_LABEL}_hadoop-${HADOOP_VERSION} build
+
+docker tag "${DOCKER_REPO}/spark:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
 
 SPARK_XY_VERSION="$(echo ${SPARK_VERSION} | cut -c 1-3)"
-if [ "${SPARK_XY_VERSION}" != "2.3" ]; then # >= 2.4
-    docker tag "${DOCKER_REPO}/spark-r:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-r:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}"
-    docker tag "${DOCKER_REPO}/spark-py:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-py:${SPARK_VERSION}_hadoop-${HADOOP_VERSION}"
+if [ "${SPARK_XY_VERSION}" != "2.3" ]; then  # >= 2.4 or master
+    docker tag "${DOCKER_REPO}/spark-r:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-r:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
+    docker tag "${DOCKER_REPO}/spark-py:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-py:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
 fi
 
 popd >/dev/null
