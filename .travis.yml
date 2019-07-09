@@ -14,7 +14,7 @@ matrix:
   - services: docker
     env:
     - SPARK_VERSION=master
-    - HADOOP_VERSION=3.1.0
+    - HADOOP_VERSION=3.2.0
     - WITH_HIVE=true
     - WITH_PYSPARK=true
   - services: docker
