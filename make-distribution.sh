@@ -16,32 +16,36 @@ else
 fi
 
 # Get the Spark source files set-up ready
-if [ ! -d "spark" ] ; then
+if [ ! -d "spark" ]; then
     git clone https://github.com/apache/spark.git -b "${SPARK_VERSION_TAG}"
 else
     pushd spark >/dev/null
     git reset --hard
     git checkout "${SPARK_VERSION_TAG}"
+    git pull
     popd >/dev/null
 fi
 
-HIVE_INSTALL_FLAG=$(if [ "${WITH_HIVE}" = "true" ]; then echo "-Phive"; fi)
-PYSPARK_INSTALL_FLAG=$(if [ "${WITH_PYSPARK}" = "true" ]; then echo "--pip"; fi)
+[ "${WITH_HIVE}" = "true" ] && HIVE_INSTALL_FLAG="yes"
+[ "${WITH_PYSPARK}" = "true" ] && PYSPARK_INSTALL_FLAG="yes"
 
 pushd spark >/dev/null
 
+[ "${SPARK_VERSION}" != "master" ] && HADOOP_OVERRIDE_FLAG="yes"
+
 # The build is very verbose and exceeds max log length, need to reduce using awk
-./dev/make-distribution.sh \
-    "${PYSPARK_INSTALL_FLAG}" --name "spark-${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" \
+# TERM issue: https://github.com/lihaoyi/mill/issues/139#issuecomment-366818171
+TERM=xterm-color ./dev/make-distribution.sh \
+    ${PYSPARK_INSTALL_FLAG:+"--pip"} --name "spark-${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" \
     "-Phadoop-$(echo "${HADOOP_VERSION}" | cut -c 1-3)" \
-    "-Dhadoop.version=${HADOOP_VERSION}" \
+    ${HADOOP_OVERRIDE_FLAG:+"-Dhadoop.version=${HADOOP_VERSION}"} \
     -Pkubernetes \
-    "${HIVE_INSTALL_FLAG}" \
+    ${HIVE_INSTALL_FLAG:+"-Phive"} \
     -DskipTests | awk 'NR % 10 == 0'
 
-# Replace Hive for Hadoop 3 since Hive 1.2.1 does not officially support Hadoop 3
+# Replace Hive for Hadoop 3 since Hive 1.2.1 does not officially support Hadoop 3 when using Spark 2.y.z
 # Note docker-image-tool.sh takes the jars from assembly/target/scala-2.*/jars
-if [ "${WITH_HIVE}" = "true" ] && [ "$(echo "${HADOOP_VERSION}" | cut -c 1)" = "3" ]; then
+if [ "${SPARK_VERSION}" != "master" ] && [ "${WITH_HIVE}" = "true" ] && [ "$(echo "${HADOOP_VERSION}" | cut -c 1)" = "3" ]; then
     JARS_DIR="$(find assembly -type d -name 'scala-2.*')"
     (cd "${JARS_DIR}" && curl -LO "${HIVE_HADOOP3_HIVE_EXEC_URL}")
     (cp "${JARS_DIR}/hive-exec-1.2.1.spark2.jar" dist/jars/)
