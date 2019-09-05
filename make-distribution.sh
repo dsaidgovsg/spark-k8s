@@ -65,7 +65,7 @@ docker tag "${DOCKER_REPO}/spark:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" "${DOC
 
 SPARK_MAJOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f1)"
 SPARK_MINOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f2)"
-if [[ "${SPARK_VERSION}" == "master" ]] || [[ ${SPARK_MAJOR_VERSION} -ge 2 ]] && [[ ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >= 2.4
+if [[ "${SPARK_VERSION}" == "master" ]] || [[ ${SPARK_MAJOR_VERSION} -ge 2 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >= 2.4
     docker tag "${DOCKER_REPO}/spark-r:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-r:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
     docker tag "${DOCKER_REPO}/spark-py:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-py:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
 fi
