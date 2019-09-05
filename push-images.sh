@@ -15,8 +15,11 @@ fi
 
 docker push "${DOCKER_REPO}:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
 
+# Spark <= 2.3 does not do -py and -r set-up, therefore we need this check here
+SPARK_MAJOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f1)"
+SPARK_MINOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f2)"
 SPARK_XY_VERSION="$(echo "${SPARK_VERSION}" | cut -c 1-3)"
-if [ "${SPARK_VERSION}" != "master" ] && [ "${SPARK_XY_VERSION}" != "2.3" ]; then  # >= 2.4
+if [ "${SPARK_VERSION}" = "master" ] || [ "${SPARK_VERSION}" != "master" ] && [ "${SPARK_XY_VERSION}" != "2.3" ]; then  # >= 2.4
     docker push "${DOCKER_REPO}-r:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
     docker push "${DOCKER_REPO}-py:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
 fi
