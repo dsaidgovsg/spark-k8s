@@ -62,8 +62,8 @@ fi
 ./bin/docker-image-tool.sh \
     -r "${DOCKER_REPO}" \
     -t "${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" \
-    -p resource-managers/kubernetes/docker/src/main/dockerfiles/spark/bindings/python/Dockerfile \
-    -R resource-managers/kubernetes/docker/src/main/dockerfiles/spark/bindings/R/Dockerfile \
+    -p kubernetes/dockerfiles/spark/bindings/python/Dockerfile \
+    -R kubernetes/dockerfiles/spark/bindings/R/Dockerfile \
     build
 
 docker tag "${DOCKER_REPO}/spark:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
