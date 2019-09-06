@@ -58,19 +58,16 @@ else
     SPARK_LABEL="${SPARK_VERSION}"
 fi
 
-SPARK_MAJOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f1)"
-SPARK_MINOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f2)"
-
-# Spark <= 2.3 does not do -py and -r set-up, therefore we need this check here
 if [[ "${SPARK_VERSION}" == "master" ]]; then
     # master branch requires manual specification of the paths of -py and -r Dockerfiles
     ./bin/docker-image-tool.sh \
         -r "${DOCKER_REPO}" \
         -t "${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" \
-        -p kubernetes/dockerfiles/spark/bindings/python/Dockerfile \
-        -R kubernetes/dockerfiles/spark/bindings/R/Dockerfile \
+        -p dist/kubernetes/dockerfiles/spark/bindings/python/Dockerfile \
+        -R dist/kubernetes/dockerfiles/spark/bindings/R/Dockerfile \
         build
-elif [[ ${SPARK_MAJOR_VERSION} -ge 2 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >= 2.4
+else
+    # branch-2.3 will does not have -py and -r builds
     # branch-2.4 will auto-infer the -py and -r Dockerfile paths correctly
     ./bin/docker-image-tool.sh \
         -r "${DOCKER_REPO}" \
@@ -80,7 +77,11 @@ fi
 
 docker tag "${DOCKER_REPO}/spark:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
 
+SPARK_MAJOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f1)"
+SPARK_MINOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f2)"
+
 # There is no way to rename the Docker image, so we simply retag
+# Spark <= 2.3 does not do -py and -r set-up, therefore we need this check here
 if [[ "${SPARK_VERSION}" == "master" ]] || [[ ${SPARK_MAJOR_VERSION} -ge 2 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >= 2.4
     docker tag "${DOCKER_REPO}/spark-r:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-r:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
     docker tag "${DOCKER_REPO}/spark-py:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-py:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
