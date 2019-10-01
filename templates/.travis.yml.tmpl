@@ -32,7 +32,7 @@ before_script:
 - cd "/tmp/$(basename "$(pwd)")"
   
 script:
-- travis_wait 60 bash make-distribution.sh"
+- travis_wait 60 bash make-distribution.sh
 
 deploy:
   provider: script
