@@ -21,6 +21,7 @@ matrix:
 {%- endfor %}
 
 before_install:
+- cd /tmp
 - sudo apt-get install --no-install-recommends -y python python-setuptools
 addons:
   apt:
