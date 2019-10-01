@@ -40,6 +40,9 @@ matrix:
     - WITH_HIVE=true
     - WITH_PYSPARK=true
 
+before_script:
+- docker --version
+
 script:
 - travis_wait 60 bash make-distribution.sh
 

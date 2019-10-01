@@ -30,6 +30,9 @@ matrix:
     - WITH_PYSPARK={{ v.with_pyspark }}
 {%- endfor %}
 
+before_script:
+- docker --version
+
 script:
 - travis_wait 60 bash make-distribution.sh
 
