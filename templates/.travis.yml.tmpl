@@ -9,9 +9,15 @@ env:
   global:
   - IMAGE_NAME=spark-k8s
 
+# This is critical because of the way -f is interpreted in newer version with
+# regards to the build Docker context path
 addons:
   apt:
     update: true
+    packages:
+    - docker-ce
+    - python
+    - python-setuptools
 
 matrix:
   include:
@@ -24,13 +30,6 @@ matrix:
     - WITH_PYSPARK={{ v.with_pyspark }}
 {%- endfor %}
 
-before_install:
-- sudo apt-get install --no-install-recommends -y python python-setuptools
-
-before_script:
-- ln -s "$(pwd)" "/tmp/$(basename "$(pwd)")"
-- cd "/tmp/$(basename "$(pwd)")"
-  
 script:
 - travis_wait 60 bash make-distribution.sh
 
