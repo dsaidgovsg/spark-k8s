@@ -63,8 +63,8 @@ if [[ "${SPARK_VERSION}" == "master" ]]; then
     ./bin/docker-image-tool.sh \
         -r "${DOCKER_REPO}" \
         -t "${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" \
-        -p dist/kubernetes/dockerfiles/spark/bindings/python/Dockerfile \
-        -R dist/kubernetes/dockerfiles/spark/bindings/R/Dockerfile \
+        -p resource-managers/kubernetes/docker/src/main/dockerfiles/spark/bindings/python/Dockerfile \
+        -R resource-managers/kubernetes/docker/src/main/dockerfiles/spark/bindings/R/Dockerfile \
         build
 else
     # branch-2.3 will does not have -py and -r builds
