@@ -25,11 +25,14 @@ matrix:
 {%- endfor %}
 
 before_install:
-- ln -s "$(pwd)" "/tmp/$(basename "$(pwd)")"
 - sudo apt-get install --no-install-recommends -y python python-setuptools
+
+before_script:
+- ln -s "$(pwd)" "/tmp/$(basename "$(pwd)")"
+- cd "/tmp/$(basename "$(pwd)")"
   
 script:
-- travis_wait 60 bash -c "cd "/tmp/$(basename "$(pwd)")" && bash make-distribution.sh"
+- travis_wait 60 bash make-distribution.sh"
 
 deploy:
   provider: script
