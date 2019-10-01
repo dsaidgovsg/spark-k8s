@@ -7,7 +7,11 @@ sudo: required
 
 env:
   global:
-  - DOCKER_REPO=${DOCKER_USERNAME}/spark-k8s
+  - IMAGE_NAME=spark-k8s
+
+addons:
+  apt:
+    update: true
 
 matrix:
   include:
@@ -21,16 +25,11 @@ matrix:
 {%- endfor %}
 
 before_install:
-- set -x
-- cd $(pwd)
-- set +x
+- ln -s "$(pwd)" "/tmp/$(basename "$(pwd)")"
 - sudo apt-get install --no-install-recommends -y python python-setuptools
-addons:
-  apt:
-    update: true
   
 script:
-- travis_wait 60 bash make-distribution.sh
+- travis_wait 60 bash -c "cd "/tmp/$(basename "$(pwd)")" && bash make-distribution.sh"
 
 deploy:
   provider: script

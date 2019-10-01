@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DOCKER_REPO=${DOCKER_REPO:-guangie88/spark-k8s}
 docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
 
 pushd spark >/dev/null
@@ -13,13 +12,19 @@ else
     SPARK_LABEL="${SPARK_VERSION}"
 fi
 
-docker push "${DOCKER_REPO}:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
+TAG_NAME="${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
+
+docker tag "${IMAGE_NAME}:${TAG_NAME}" "${DOCKER_USERNAME}/${IMAGE_NAME}:${TAG_NAME}"
+docker push "${DOCKER_USERNAME}/${IMAGE_NAME}:${TAG_NAME}"
 
 SPARK_MAJOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f1)"
 SPARK_MINOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f2)"
 if [[ "${SPARK_VERSION}" == "master" ]] || [[ ${SPARK_MAJOR_VERSION} -ge 2 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >= 2.4
-    docker push "${DOCKER_REPO}-r:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
-    docker push "${DOCKER_REPO}-py:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
+    docker tag "${IMAGE_NAME}-r:${TAG_NAME}" "${DOCKER_USERNAME}/${IMAGE_NAME}-r:${TAG_NAME}"
+    docker push "${DOCKER_USERNAME}/${IMAGE_NAME}-r:${TAG_NAME}"
+
+    docker tag "${IMAGE_NAME}-py:${TAG_NAME}" "${DOCKER_USERNAME}/${IMAGE_NAME}-py:${TAG_NAME}"
+    docker push "${DOCKER_USERNAME}/${IMAGE_NAME}-py:${TAG_NAME}"
 fi
 
 popd >/dev/null
