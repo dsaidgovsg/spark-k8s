@@ -7,7 +7,17 @@ sudo: required
 
 env:
   global:
-  - DOCKER_REPO=${DOCKER_USERNAME}/spark-k8s
+  - IMAGE_NAME=spark-k8s
+
+# This is critical because of the way -f is interpreted in newer version with
+# regards to the build Docker context path
+addons:
+  apt:
+    update: true
+    packages:
+    - docker-ce
+    - python
+    - python-setuptools
 
 matrix:
   include:
@@ -20,12 +30,9 @@ matrix:
     - WITH_PYSPARK={{ v.with_pyspark }}
 {%- endfor %}
 
-before_install:
-- sudo apt-get install --no-install-recommends -y python python-setuptools
-addons:
-  apt:
-    update: true
-  
+before_script:
+- docker --version
+
 script:
 - travis_wait 60 bash make-distribution.sh
 

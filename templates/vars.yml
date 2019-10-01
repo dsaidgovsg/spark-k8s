@@ -4,12 +4,7 @@ versions:
   with_hive:    "true"
   with_pyspark: "true"
 
-- spark:        "2.3.3"
-  hadoop:       "2.7.3"
-  with_hive:    "true"
-  with_pyspark: "true"
-
-- spark:        "2.4.4"
+- spark:        "2.3.4"
   hadoop:       "2.7.3"
   with_hive:    "true"
   with_pyspark: "true"

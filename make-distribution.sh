@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 set -euox pipefail
 
-DOCKER_REPO=${DOCKER_REPO:-guangie88/spark-k8s}
 HIVE_HADOOP3_HIVE_EXEC_URL=${HIVE_HADOOP3_HIVE_EXEC_URL:-https://github.com/guangie88/hive-exec-jar/releases/download/1.2.1.spark2-hadoop3/hive-exec-1.2.1.spark2.jar}
 
-if ! which git >/dev/null; then
+if ! command -v git >/dev/null; then
     >&2 echo "Cannot find git in PATH!"
     exit 1
 fi
@@ -58,15 +57,35 @@ else
     SPARK_LABEL="${SPARK_VERSION}"
 fi
 
+TAG_NAME="${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
+
+if [[ "${SPARK_VERSION}" == "master" ]]; then
+    # master branch requires manual specification of the paths of -py and -r Dockerfiles
+    ./bin/docker-image-tool.sh \
+        -r "${IMAGE_NAME}" \
+        -t "${TAG_NAME}" \
+        -p dist/kubernetes/dockerfiles/spark/bindings/python/Dockerfile \
+        -R dist/kubernetes/dockerfiles/spark/bindings/R/Dockerfile \
+        build
+else
+    # branch-2.3 will does not have -py and -r builds
+    # branch-2.4 will auto-infer the -py and -r Dockerfile paths correctly
+    ./bin/docker-image-tool.sh \
+        -r "${IMAGE_NAME}" \
+        -t "${TAG_NAME}" \
+        build
+fi
+
+docker tag "${IMAGE_NAME}/spark:${TAG_NAME}" "${IMAGE_NAME}:${TAG_NAME}"
+
+SPARK_MAJOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f1)"
+SPARK_MINOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f2)"
+
 # There is no way to rename the Docker image, so we simply retag
-./bin/docker-image-tool.sh -r "${DOCKER_REPO}" -t "${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" build
-
-docker tag "${DOCKER_REPO}/spark:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
-
-SPARK_XY_VERSION="$(echo "${SPARK_VERSION}" | cut -c 1-3)"
-if [ "${SPARK_VERSION}" != "master" ] && [ "${SPARK_XY_VERSION}" != "2.3" ]; then  # >= 2.4
-    docker tag "${DOCKER_REPO}/spark-r:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-r:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
-    docker tag "${DOCKER_REPO}/spark-py:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}" "${DOCKER_REPO}-py:${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
+# Spark <= 2.3 does not do -py and -r set-up, therefore we need this check here
+if [[ "${SPARK_VERSION}" == "master" ]] || [[ ${SPARK_MAJOR_VERSION} -ge 2 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >= 2.4
+    docker tag "${IMAGE_NAME}/spark-r:${TAG_NAME}" "${IMAGE_NAME}-r:${TAG_NAME}"
+    docker tag "${IMAGE_NAME}/spark-py:${TAG_NAME}" "${IMAGE_NAME}-py:${TAG_NAME}"
 fi
 
 popd >/dev/null
