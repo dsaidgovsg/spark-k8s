@@ -4,4 +4,4 @@ ARG IMAGE_MAME=
 ARG TAG_MAME=
 FROM ${IMAGE_NAME}-py:${TAG_NAME}
 
-COPY ./spark/python/pyspark "${SPARK_HOME}/python/pyspark"
+COPY ./python/pyspark "${SPARK_HOME}/python/pyspark"
