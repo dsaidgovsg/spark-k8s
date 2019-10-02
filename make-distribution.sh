@@ -85,9 +85,17 @@ SPARK_MINOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f2)"
 
 # There is no way to rename the Docker image, so we simply retag
 # Spark <= 2.3 does not do -py and -r set-up, therefore we need this check here
-if [[ "${SPARK_VERSION}" == "master" ]] || [[ ${SPARK_MAJOR_VERSION} -ge 2 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >= 2.4
+if [[ "${SPARK_VERSION}" == "master" ]] || [[ ${SPARK_MAJOR_VERSION} -ge 3 ]] || [[ ${SPARK_MAJOR_VERSION} -eq 2 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >= 2.4
     docker tag "${IMAGE_NAME}/spark-r:${TAG_NAME}" "${IMAGE_NAME}-r:${TAG_NAME}"
     docker tag "${IMAGE_NAME}/spark-py:${TAG_NAME}" "${IMAGE_NAME}-py:${TAG_NAME}"
 fi
 
 popd >/dev/null
+
+# Spark 2.4 builds are silly and don't include spark/python/pyspark contents
+# So manually include them
+if [[ "${SPARK_VERSION}" != "master" ]] && [[ ${SPARK_MAJOR_VERSION} -eq 2 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >= 2.4
+    docker build . -f Dockerfile-py -t "${IMAGE_NAME}-py:${TAG_NAME}" \
+        --build-arg "IMAGE_NAME=${IMAGE_NAME}" \
+        --build-arg "TAG_NAME=${TAG_NAME}"
+fi
