@@ -20,8 +20,8 @@ if [ ! -d "spark" ]; then
 else
     pushd spark >/dev/null
     git reset --hard
-    git checkout "${SPARK_VERSION_TAG}"
-    git pull
+    git fetch
+    git checkout "origin/${SPARK_VERSION_TAG}" || git checkout "${SPARK_VERSION_TAG}"
     popd >/dev/null
 fi
 
@@ -44,10 +44,12 @@ TERM=xterm-color ./dev/make-distribution.sh \
 
 # Replace Hive for Hadoop 3 since Hive 1.2.1 does not officially support Hadoop 3 when using Spark 2.y.z
 # Note docker-image-tool.sh takes the jars from assembly/target/scala-2.*/jars
-if [ "${SPARK_VERSION}" != "master" ] && [ "${WITH_HIVE}" = "true" ] && [ "$(echo "${HADOOP_VERSION}" | cut -c 1)" = "3" ]; then
-    JARS_DIR="$(find assembly -type d -name 'scala-2.*')"
-    (cd "${JARS_DIR}" && curl -LO "${HIVE_HADOOP3_HIVE_EXEC_URL}")
-    (cp "${JARS_DIR}/hive-exec-1.2.1.spark2.jar" dist/jars/)
+if [ "${SPARK_VERSION}" != "master" ] && [ "${WITH_HIVE}" = "true" ] && [ "$(echo "${HADOOP_VERSION}" | cut -c 1)" -eq 3 ]; then
+    HIVE_EXEC_JAR_NAME="hive-exec-1.2.1.spark2.jar"
+    TARGET_JAR_PATH="$(find assembly -type f -name "${HIVE_EXEC_JAR_NAME}")"
+    curl -LO "${HIVE_HADOOP3_HIVE_EXEC_URL}" && mv "${HIVE_EXEC_JAR_NAME}" "${TARGET_JAR_PATH}"
+    # Spark <= 2.4 uses ${TARGET_JAR_PATH} for Docker COPY, but Spark >= 3 uses dist/jars/
+    cp "${TARGET_JAR_PATH}" "dist/jars/"
 fi
 
 GIT_REV="$(git rev-parse HEAD | cut -c 1-7)"
