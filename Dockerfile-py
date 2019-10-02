@@ -1,7 +1,7 @@
 # This Dockerfile is meant to be only used by make-distribution.sh for copying
 # pyspark directory for >= Spark 2.4
-ARG IMAGE_MAME=
-ARG TAG_MAME=
+ARG IMAGE_MAME
+ARG TAG_MAME
 FROM ${IMAGE_NAME}-py:${TAG_NAME}
 
-COPY ./python/pyspark "${SPARK_HOME}/python/pyspark"
+COPY ./spark/python/pyspark "${SPARK_HOME}/python/pyspark"
