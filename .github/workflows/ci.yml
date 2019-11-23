@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        version:
+        - spark:        "2.3.4"
+          hadoop:       "2.7.3"
+          with_hive:    "true"
+          with_pyspark: "true"
+        - spark:        "2.4.4"
+          hadoop:       "3.1.0"
+          with_hive:    "true"
+          with_pyspark: "true"
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: "spark-k8s"
+      DIST_VERSION: "v1"
+      SPARK_VERSION: "${{ matrix.version.spark }}"
+      HADOOP_VERSION: "${{ matrix.version.hadoop }}"
+      WITH_HIVE: "${{ matrix.version.with_hive }}"
+      WITH_PYSPARK: "${{ matrix.version.with_pyspark }}"
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v1
+    - name: Build Docker image
+      run: bash make-distribution.sh
+    - name: Push Docker image
+      run: bash push-images.sh
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      if: github.event_name == 'push'
