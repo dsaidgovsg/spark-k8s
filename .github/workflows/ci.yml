@@ -43,4 +43,4 @@ jobs:
       run: bash make-distribution.sh
     - name: Push Docker image
       run: bash push-images.sh
-      if: github.event.action == "push"
+      if: github.event_name == "push"
