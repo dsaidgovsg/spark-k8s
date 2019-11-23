@@ -21,17 +21,10 @@ jobs:
           hadoop:       "3.1.0"
           with_hive:    "true"
           with_pyspark: "true"
-        - spark:        "3.0.0-preview-rc1"
-          hadoop:       "3.2.0"
-          with_hive:    "true"
-          with_pyspark: "true"
-        - spark:        "3.0.0-preview-rc2"
-          hadoop:       "3.2.0"
-          with_hive:    "true"
-          with_pyspark: "true"
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: "spark-k8s"
+      DIST_VERSION: "v1"
       SPARK_VERSION: "${{ matrix.version.spark }}"
       HADOOP_VERSION: "${{ matrix.version.hadoop }}"
       WITH_HIVE: "${{ matrix.version.with_hive }}"
