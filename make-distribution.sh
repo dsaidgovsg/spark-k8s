@@ -8,14 +8,14 @@ if ! command -v git >/dev/null; then
     exit 1
 fi
 
-if [ "${SPARK_VERSION}" = "master" ]; then
+if [[ "${SPARK_VERSION}" == "master" ]]; then
     SPARK_VERSION_TAG="master"
 else
     SPARK_VERSION_TAG="v${SPARK_VERSION}"
 fi
 
 # Get the Spark source files set-up ready
-if [ ! -d "spark" ]; then
+if [[ ! -d "spark" ]]; then
     git clone https://github.com/apache/spark.git -b "${SPARK_VERSION_TAG}"
 else
     pushd spark >/dev/null
@@ -25,12 +25,12 @@ else
     popd >/dev/null
 fi
 
-[ "${WITH_HIVE}" = "true" ] && HIVE_INSTALL_FLAG="yes"
-[ "${WITH_PYSPARK}" = "true" ] && PYSPARK_INSTALL_FLAG="yes"
+[[ "${WITH_HIVE}" == "true" ]] && HIVE_INSTALL_FLAG="yes"
+[[ "${WITH_PYSPARK}" == "true" ]] && PYSPARK_INSTALL_FLAG="yes"
 
 pushd spark >/dev/null
 
-[ "${SPARK_VERSION}" != "master" ] && [ "${SPARK_VERSION}" != 3.0.0* ] && HADOOP_OVERRIDE_FLAG="yes"
+[[ "${SPARK_VERSION}" != "master" ]] && [[ "${SPARK_VERSION}" != 3.0.0* ]] && HADOOP_OVERRIDE_FLAG="yes"
 
 # The build is very verbose and exceeds max log length, need to reduce using awk
 # TERM issue: https://github.com/lihaoyi/mill/issues/139#issuecomment-366818171
@@ -44,7 +44,7 @@ TERM=xterm-color ./dev/make-distribution.sh \
 
 # Replace Hive for Hadoop 3 since Hive 1.2.1 does not officially support Hadoop 3 when using Spark 2.y.z
 # Note docker-image-tool.sh takes the jars from assembly/target/scala-2.*/jars
-if [ "${SPARK_VERSION}" != "master" ] && [ "${SPARK_VERSION}" != 3.0.0* ] && [ "${WITH_HIVE}" = "true" ] && [ "$(echo "${HADOOP_VERSION}" | cut -c 1)" -eq 3 ]; then
+if [[ "${SPARK_VERSION}" != "master" ]] && [[ "${SPARK_VERSION}" != 3.0.0* ]] && [[ "${WITH_HIVE}" = "true" ]] && [[ "$(echo "${HADOOP_VERSION}" | cut -c 1)" -eq 3 ]]; then
     HIVE_EXEC_JAR_NAME="hive-exec-1.2.1.spark2.jar"
     TARGET_JAR_PATH="$(find assembly -type f -name "${HIVE_EXEC_JAR_NAME}")"
     curl -LO "${HIVE_HADOOP3_HIVE_EXEC_URL}" && mv "${HIVE_EXEC_JAR_NAME}" "${TARGET_JAR_PATH}"
@@ -53,7 +53,7 @@ if [ "${SPARK_VERSION}" != "master" ] && [ "${SPARK_VERSION}" != 3.0.0* ] && [ "
 fi
 
 GIT_REV="$(git rev-parse HEAD | cut -c 1-7)"
-if [ "${SPARK_VERSION}" = "master" ]; then
+if [[ "${SPARK_VERSION}" == "master" ]]; then
     SPARK_LABEL="master-${GIT_REV}"
 else
     SPARK_LABEL="${SPARK_VERSION}"
