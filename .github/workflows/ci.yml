@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        version:
+        - spark:        "2.3.4"
+          hadoop:       "2.7.3"
+          with_hive:    "true"
+          with_pyspark: "true"
+        - spark:        "2.4.4"
+          hadoop:       "3.1.0"
+          with_hive:    "true"
+          with_pyspark: "true"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v1
+    - name: Build executable
+      run: bash make-distribution.sh
+      env:
+        IMAGE_NAME: "spark-k8s"
+        SPARK_VERSION: "${{ matrix.version.spark }}"
+        HADOOP_VERSION: "${{ matrix.version.hadoop }}"
+        WITH_HIVE: "${{ matrix.version.with_hive }}"
+        WITH_PYSPARK: "${{ matrix.version.with_pyspark }}"
