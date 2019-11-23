@@ -43,4 +43,7 @@ jobs:
       run: bash make-distribution.sh
     - name: Push Docker image
       run: bash push-images.sh
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       if: github.event_name == "push"
