@@ -44,7 +44,7 @@ TERM=xterm-color ./dev/make-distribution.sh \
 
 # Replace Hive for Hadoop 3 since Hive 1.2.1 does not officially support Hadoop 3 when using Spark 2.y.z
 # Note docker-image-tool.sh takes the jars from assembly/target/scala-2.*/jars
-if [ "${SPARK_VERSION}" != "master" ] && [ "${WITH_HIVE}" = "true" ] && [ "$(echo "${HADOOP_VERSION}" | cut -c 1)" -eq 3 ]; then
+if [ "${SPARK_VERSION}" != "master" ] && [ "${SPARK_VERSION}" != 3.0.0* ] && [ "${WITH_HIVE}" = "true" ] && [ "$(echo "${HADOOP_VERSION}" | cut -c 1)" -eq 3 ]; then
     HIVE_EXEC_JAR_NAME="hive-exec-1.2.1.spark2.jar"
     TARGET_JAR_PATH="$(find assembly -type f -name "${HIVE_EXEC_JAR_NAME}")"
     curl -LO "${HIVE_HADOOP3_HIVE_EXEC_URL}" && mv "${HIVE_EXEC_JAR_NAME}" "${TARGET_JAR_PATH}"
@@ -92,9 +92,9 @@ fi
 
 popd >/dev/null
 
-# Spark 2.4 builds are silly and don't include spark/python/pyspark contents
+# Spark >= 2.4 builds are silly and don't include spark/python/pyspark contents
 # So manually include them
-if [[ "${SPARK_VERSION}" != "master" ]] && [[ ${SPARK_MAJOR_VERSION} -eq 2 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >= 2.4
+if [[ "${SPARK_VERSION}" == "master" ]] || [[ "${SPARK_VERSION}" == 3.0.0* ]] || [[ ${SPARK_MAJOR_VERSION} -eq 2 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >= 2.4
     docker build . -f Dockerfile-py -t "${IMAGE_NAME}-py:${TAG_NAME}" \
         --build-arg "IMAGE_NAME=${IMAGE_NAME}" \
         --build-arg "TAG_NAME=${TAG_NAME}"
