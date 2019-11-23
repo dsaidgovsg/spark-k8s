@@ -30,7 +30,7 @@ fi
 
 pushd spark >/dev/null
 
-[ "${SPARK_VERSION}" != "master" ] && HADOOP_OVERRIDE_FLAG="yes"
+[ "${SPARK_VERSION}" != "master" ] && [ "${SPARK_VERSION}" != 3.0.0* ] && HADOOP_OVERRIDE_FLAG="yes"
 
 # The build is very verbose and exceeds max log length, need to reduce using awk
 # TERM issue: https://github.com/lihaoyi/mill/issues/139#issuecomment-366818171
