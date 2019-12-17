@@ -18,3 +18,13 @@ unofficial patch can be found
 
 For the build, if `WITH_PYSPARK` is set to `true`, then `python` and
 `python-setuptools` should be `apt` installed.
+
+Because of the fast-changing nature of the Spark repository, this set-up might
+contain inevitable breaking changes. As such, the build Docker images are
+additionally tagged with this repository distribution tag version as prefix,
+such as `v1_spark-2.4.4_hadoop-3.1.0`.
+
+The older distribution tag version will separately go into a different Git
+branch for clarity.
+
+For details on the distribution versions, check [CHANGELOG.md](CHANGELOG.md).
