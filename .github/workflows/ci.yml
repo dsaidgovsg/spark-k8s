@@ -40,6 +40,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v1
+    - name: Install setuptools
+      run: pip install setuptools
     - name: Build Docker image
       run: bash make-distribution.sh
     - name: Push Docker image
