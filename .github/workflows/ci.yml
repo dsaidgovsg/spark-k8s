@@ -13,18 +13,26 @@ jobs:
     strategy:
       matrix:
         version:
-        - spark:        "2.3.4"
-          hadoop:       "2.7.3"
+        - spark:        "3.0.0-preview-rc2"
+          hadoop:       "2.7.4"
           with_hive:    "true"
           with_pyspark: "true"
-        - spark:        "2.4.4"
-          hadoop:       "3.1.0"
+        - spark:        "3.0.0-preview-rc2"
+          hadoop:       "3.2.0"
+          with_hive:    "true"
+          with_pyspark: "true"
+        - spark:        "3.0.0-preview2-rc2"
+          hadoop:       "2.7.4"
+          with_hive:    "true"
+          with_pyspark: "true"
+        - spark:        "3.0.0-preview2-rc2"
+          hadoop:       "3.2.0"
           with_hive:    "true"
           with_pyspark: "true"
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: "spark-k8s"
-      DIST_VERSION: "v1"
+      DIST_VERSION: "v2"
       SPARK_VERSION: "${{ matrix.version.spark }}"
       HADOOP_VERSION: "${{ matrix.version.hadoop }}"
       WITH_HIVE: "${{ matrix.version.with_hive }}"
@@ -32,6 +40,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v1
+    - name: Install setuptools and wheel
+      run: python3 -m pip install setuptools wheel
     - name: Build Docker image
       run: bash make-distribution.sh
     - name: Push Docker image

@@ -5,19 +5,13 @@
 Travis setup to generate Spark Docker images meant for running in Kubernetes
 set-up.
 
-All the built images here are inherently based on `openjdk8` and Alpine as the
-official build script builds the Docker image based on that.
-
-Additionally, all the built images are currently built with Hadoop and Hive
-support, and images that are using Hadoop 3 for Spark 2.Y.Z are automatically
-applied with unofficial patch for Hive JAR to make it work with Hadoop 3. The
-unofficial patch can be found
-[here](https://github.com/guangie88/hive-exec-jar).
+The current set-up only builds for Spark v3 preview versions, and should be
+updated to support v3 when it comes.
 
 ## Note
 
-For the build, if `WITH_PYSPARK` is set to `true`, then `python` and
-`python-setuptools` should be `apt` installed.
+All the build images here are Debian based as the official Spark repository now
+uses `openjdk:8-jdk-slim` as the base image for Kubernetes build.
 
 Because of the fast-changing nature of the Spark repository, this set-up might
 contain inevitable breaking changes. As such, the build Docker images are
