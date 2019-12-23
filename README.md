@@ -1,6 +1,6 @@
 # `spark-k8s`
 
-![CI Status](https://img.shields.io/github/workflow/status/guangie88/spark-k8s/CI/master?color=green&label=CI&logo=github&logoColor=white&style=for-the-badge)
+![CI Status](https://img.shields.io/github/workflow/status/guangie88/spark-k8s/CI/master?label=CI&logo=github&style=for-the-badge)
 
 Travis setup to generate Spark Docker images meant for running in Kubernetes
 set-up.
