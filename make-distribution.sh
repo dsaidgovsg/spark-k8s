@@ -38,7 +38,7 @@ TERM=xterm-color ./dev/make-distribution.sh \
 GIT_REV="$(git rev-parse HEAD | cut -c 1-7)"
 SPARK_LABEL="${SPARK_VERSION}"
 
-TAG_NAME="${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
+TAG_NAME="${SELF_VERSION}_${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
 
 ./bin/docker-image-tool.sh \
     -r "${IMAGE_NAME}" \
