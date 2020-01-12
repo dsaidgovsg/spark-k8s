@@ -51,7 +51,7 @@ fi
 GIT_REV="$(git rev-parse HEAD | cut -c 1-7)"
 SPARK_LABEL="${SPARK_VERSION}"
 
-TAG_NAME="${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
+TAG_NAME="${SELF_VERSION}_${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
 
 # branch-2.3 will does not have -py and -r builds
 # branch-2.4 will auto-infer the -py and -r Dockerfile paths correctly
