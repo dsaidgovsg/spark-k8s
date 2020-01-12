@@ -2,8 +2,7 @@
 
 ![CI Status](https://img.shields.io/github/workflow/status/guangie88/spark-k8s/CI/master?label=CI&logo=github&style=for-the-badge)
 
-Travis setup to generate Spark Docker images meant for running in Kubernetes
-set-up.
+CI setup to generate Spark Docker images meant for running in Kubernetes sset-up.
 
 The current set-up only builds for Spark v3 preview versions, and should be
 updated to support v3 when it comes.
