@@ -28,11 +28,19 @@ pushd spark >/dev/null
 
 HADOOP_OVERRIDE_FLAG="yes"
 
+if [[ "${SCALA_VERSION}" != "2.11" ]] && [[ "${SCALA_VERSION}" != "2.12" ]]; then
+    >&2 echo "SCALA_VERSION must be either 2.11 or 2.12!"
+    exit 1
+fi
+
+./dev/change-scala-version.sh "${SCALA_VERSION}"
+
 # The build is very verbose and exceeds max log length, need to reduce using awk
 # TERM issue: https://github.com/lihaoyi/mill/issues/139#issuecomment-366818171
 TERM=xterm-color ./dev/make-distribution.sh \
-    ${PYSPARK_INSTALL_FLAG:+"--pip"} --name "spark-${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" \
-    "-Phadoop-$(echo "${HADOOP_VERSION}" | cut -c 1-3)" \
+    ${PYSPARK_INSTALL_FLAG:+"--pip"} --name "${SPARK_VERSION}_hadoop-${HADOOP_VERSION}_scala-${SCALA_VERSION}" \
+    "-Phadoop-$(echo "${HADOOP_VERSION}" | cut -d . -f 1,2)" \
+    "-Pscala-${SCALA_VERSION}" \
     ${HADOOP_OVERRIDE_FLAG:+"-Dhadoop.version=${HADOOP_VERSION}"} \
     -Pkubernetes \
     ${HIVE_INSTALL_FLAG:+"-Phive"} \
@@ -51,7 +59,7 @@ fi
 GIT_REV="$(git rev-parse HEAD | cut -c 1-7)"
 SPARK_LABEL="${SPARK_VERSION}"
 
-TAG_NAME="${SELF_VERSION}_${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
+TAG_NAME="${SELF_VERSION}_${SPARK_LABEL}_hadoop-${HADOOP_VERSION}_scala-${SCALA_VERSION}"
 
 # branch-2.3 will does not have -py and -r builds
 # branch-2.4 will auto-infer the -py and -r Dockerfile paths correctly
