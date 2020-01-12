@@ -4,9 +4,11 @@ on:
   push:
     branches:
     - master
+    - v*
   pull_request:
     branches:
     - master
+    - v*
 
 jobs:
   build:
@@ -24,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: "spark-k8s"
-      DIST_VERSION: "v1"
+      SELF_VERSION: "v1"
       SPARK_VERSION: "${{ matrix.version.spark }}"
       HADOOP_VERSION: "${{ matrix.version.hadoop }}"
       WITH_HIVE: "${{ matrix.version.with_hive }}"
