@@ -28,7 +28,7 @@ HADOOP_OVERRIDE_FLAG="yes"
 
 # TERM issue: https://github.com/lihaoyi/mill/issues/139#issuecomment-366818171
 TERM=xterm-color ./dev/make-distribution.sh \
-    ${PYSPARK_INSTALL_FLAG:+"--pip"} --name "spark-${SPARK_VERSION}_hadoop-${HADOOP_VERSION}" \
+    ${PYSPARK_INSTALL_FLAG:+"--pip"} --name "${SPARK_VERSION}_hadoop-${HADOOP_VERSION}_scala-${SCALA_VERSION}" \
     "-Phadoop-$(echo "${HADOOP_VERSION}" | cut -d '.' -f1,2)" \
     ${HADOOP_OVERRIDE_FLAG:+"-Dhadoop.version=${HADOOP_VERSION}"} \
     -Pkubernetes \
@@ -38,7 +38,7 @@ TERM=xterm-color ./dev/make-distribution.sh \
 GIT_REV="$(git rev-parse HEAD | cut -c 1-7)"
 SPARK_LABEL="${SPARK_VERSION}"
 
-TAG_NAME="${SELF_VERSION}_${SPARK_LABEL}_hadoop-${HADOOP_VERSION}"
+TAG_NAME="${SELF_VERSION}_${SPARK_LABEL}_hadoop-${HADOOP_VERSION}_scala-${SCALA_VERSION}"
 
 ./bin/docker-image-tool.sh \
     -r "${IMAGE_NAME}" \
