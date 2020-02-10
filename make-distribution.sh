@@ -66,3 +66,14 @@ docker tag "${IMAGE_NAME}/spark-py:${TAG_NAME}" "${IMAGE_NAME}-py:${TAG_NAME}"
 docker tag "${IMAGE_NAME}/spark-r:${TAG_NAME}" "${IMAGE_NAME}-r:${TAG_NAME}"
 
 popd >/dev/null
+
+# Spark 2.4 builds are silly and don't include spark/python/pyspark contents
+# So manually include them
+SPARK_MAJOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f1)"
+SPARK_MINOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f2)"
+
+if [[ "${SPARK_VERSION}" != "master" ]] && [[ ${SPARK_MAJOR_VERSION} -eq 2 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >= 2.4
+    docker build . -f Dockerfile-py -t "${IMAGE_NAME}-py:${TAG_NAME}" \
+        --build-arg "IMAGE_NAME=${IMAGE_NAME}" \
+        --build-arg "TAG_NAME=${TAG_NAME}"
+fi

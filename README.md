@@ -15,7 +15,7 @@ uses `openjdk:8-jdk-slim` as the base image for Kubernetes build.
 Because of the fast-changing nature of the Spark repository, this set-up might
 contain inevitable breaking changes. As such, the build Docker images are
 additionally tagged with this repository distribution tag version as prefix,
-such as `v1_spark-2.4.4_hadoop-3.1.0`.
+such as `v2_2.4.5_hadoop-3.1.0_scala-2.12`.
 
 The older distribution tag version will separately go into a different Git
 branch for clarity.
