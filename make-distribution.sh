@@ -26,10 +26,13 @@ pushd spark >/dev/null
 
 HADOOP_OVERRIDE_FLAG="yes"
 
+./dev/change-scala-version.sh "${SCALA_VERSION}"
 # TERM issue: https://github.com/lihaoyi/mill/issues/139#issuecomment-366818171
 TERM=xterm-color ./dev/make-distribution.sh \
     ${PYSPARK_INSTALL_FLAG:+"--pip"} --name "${SPARK_VERSION}_hadoop-${HADOOP_VERSION}_scala-${SCALA_VERSION}" \
+    -Pscala-${SCALA_VERSION} \
     "-Phadoop-$(echo "${HADOOP_VERSION}" | cut -d '.' -f1,2)" \
+    -Phadoop-cloud \
     ${HADOOP_OVERRIDE_FLAG:+"-Dhadoop.version=${HADOOP_VERSION}"} \
     -Pkubernetes \
     ${HIVE_INSTALL_FLAG:+"-Phive"} \
