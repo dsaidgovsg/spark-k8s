@@ -1,11 +1,17 @@
 # `spark-k8s`
 
-![CI Status](https://img.shields.io/github/workflow/status/guangie88/spark-k8s/CI/master?label=CI&logo=github&style=for-the-badge)
+![CI
+Status](https://img.shields.io/github/workflow/status/guangie88/spark-k8s/CI/master?label=CI&logo=github&style=for-the-badge)
 
-CI setup to generate Spark Docker images meant for running in Kubernetes sset-up.
+CI setup to generate Spark Docker images meant for running in Kubernetes
+sset-up.
 
-The current set-up only builds for Spark v3 preview versions, and should be
-updated to support v3 when it comes.
+The current set-up builds for the following Spark versions with Kubernetes on
+Debian:
+
+- `3.0.0`
+- `2.4.6`
+- `2.4.5`
 
 ## Note
 
