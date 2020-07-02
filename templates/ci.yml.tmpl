@@ -15,65 +15,30 @@ jobs:
     strategy:
       matrix:
         version:
-        - spark:        "2.4.5"
-          hadoop:       "2.7.3"
-          scala:        "2.11"
+{%- for v in versions %}
+{%- for spark in v.spark %}
+{%- for hadoop in v.hadoop %}
+{%- for scala in v.scala %}
+        - spark:        "{{ spark }}"
+          hadoop:       "{{ hadoop }}"
+          scala:        "{{ scala }}"
           with_hive:    "true"
           with_pyspark: "true"
-        - spark:        "2.4.5"
-          hadoop:       "2.7.3"
-          scala:        "2.12"
-          with_hive:    "true"
-          with_pyspark: "true"
-        - spark:        "2.4.5"
-          hadoop:       "3.1.0"
-          scala:        "2.11"
-          with_hive:    "true"
-          with_pyspark: "true"
-        - spark:        "2.4.5"
-          hadoop:       "3.1.0"
-          scala:        "2.12"
-          with_hive:    "true"
-          with_pyspark: "true"
-        - spark:        "2.4.6"
-          hadoop:       "2.7.3"
-          scala:        "2.11"
-          with_hive:    "true"
-          with_pyspark: "true"
-        - spark:        "2.4.6"
-          hadoop:       "2.7.3"
-          scala:        "2.12"
-          with_hive:    "true"
-          with_pyspark: "true"
-        - spark:        "2.4.6"
-          hadoop:       "3.1.0"
-          scala:        "2.11"
-          with_hive:    "true"
-          with_pyspark: "true"
-        - spark:        "2.4.6"
-          hadoop:       "3.1.0"
-          scala:        "2.12"
-          with_hive:    "true"
-          with_pyspark: "true"
-        - spark:        "3.0.0"
-          hadoop:       "2.7.4"
-          scala:        "2.12"
-          with_hive:    "true"
-          with_pyspark: "true"
-        - spark:        "3.0.0"
-          hadoop:       "3.2.0"
-          scala:        "2.12"
-          with_hive:    "true"
-          with_pyspark: "true"
+{%- endfor %}
+{%- endfor %}
+{%- endfor %}
+{%- endfor %}
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: "spark-k8s"
-      SELF_VERSION: "v2"
+      SELF_VERSION: "{{ self_version }}"
+      {% raw -%}
       SPARK_VERSION: "${{ matrix.version.spark }}"
       HADOOP_VERSION: "${{ matrix.version.hadoop }}"
       SCALA_VERSION: "${{ matrix.version.scala }}"
       WITH_HIVE: "${{ matrix.version.with_hive }}"
       WITH_PYSPARK: "${{ matrix.version.with_pyspark }}"
+      {%- endraw %}
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -99,6 +64,8 @@ jobs:
     - name: Push Docker image
       run: bash push-images.sh
       env:
+        {% raw -%}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        {%- endraw %}
       if: github.event_name == 'push'

@@ -1,0 +1,10 @@
+self_version: 'v2'
+
+versions:
+- spark:  ['2.4.5', '2.4.6']
+  hadoop: ['2.7.3', '3.1.0']
+  scala:  ['2.11', '2.12']
+
+- spark:  ['3.0.0']
+  hadoop: ['2.7.4', '3.2.0']
+  scala:  ['2.12']
