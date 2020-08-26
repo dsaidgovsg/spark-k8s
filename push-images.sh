@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
+echo "${DOCKER_PASSWORD}" | docker login -u="${DOCKER_USERNAME}" --password-stdin
 
 pushd spark >/dev/null
 
