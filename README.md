@@ -1,7 +1,7 @@
 # `spark-k8s`
 
 ![CI
-Status](https://img.shields.io/github/workflow/status/guangie88/spark-k8s/CI/master?label=CI&logo=github&style=for-the-badge)
+Status](https://img.shields.io/github/workflow/status/dsaidgovsg/spark-k8s/CI/master?label=CI&logo=github&style=for-the-badge)
 
 CI setup to generate Spark Docker images meant for running in Kubernetes
 sset-up.
