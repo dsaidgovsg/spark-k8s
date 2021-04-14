@@ -75,7 +75,7 @@ jobs:
           scala:        "2.12"
           with_hive:    "true"
           with_pyspark: "true"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     env:
       IMAGE_NAME: "spark-k8s"
       SELF_VERSION: "v2"
@@ -85,6 +85,11 @@ jobs:
       WITH_HIVE: "${{ matrix.version.with_hive }}"
       WITH_PYSPARK: "${{ matrix.version.with_pyspark }}"
     steps:
+    - name: Set up Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: adopt
+        java-version: '8'
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Install tera-cli
