@@ -9,11 +9,12 @@ sset-up.
 The current set-up builds for the following Spark versions with Kubernetes on
 Debian:
 
+- `3.1.1`
+- `3.1.0`
+- `3.0.2`
 - `3.0.1`
 - `3.0.0`
 - `2.4.7`
-- `2.4.6`
-- `2.4.5`
 
 ## Note
 
@@ -30,7 +31,7 @@ branch for clarity.
 
 For details on the distribution versions, check [CHANGELOG.md](CHANGELOG.md).
 
-## How to Apply Travis Template
+## How to Apply Template
 
 For Linux user, you can download Tera CLI v0.4 at
 <https://github.com/guangie88/tera-cli/releases> and place it in `PATH`.

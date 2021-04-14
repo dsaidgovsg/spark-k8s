@@ -2,6 +2,8 @@
 
 ## v2
 
+- Add support up to 3.1.1 for Spark 3.y.z.
+- Drop 2.4.5 and 2.4.6 and only support 2.4.7 as the last supported 2.4.z version.
 - Previously supported Spark 3.0.0 previews, but drop in favor to use
   the official Spark 3.0.0. Also support from 2.4.5 and 2.4.6 that comes
   with Debian-based image support.
