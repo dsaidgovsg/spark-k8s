@@ -17,13 +17,16 @@ jobs:
         version:
 {%- for v in versions %}
 {%- for spark in v.spark %}
+{%- for java in v.java %}
 {%- for hadoop in v.hadoop %}
 {%- for scala in v.scala %}
         - spark:        "{{ spark }}"
+          java:         "{{ java }}"
           hadoop:       "{{ hadoop }}"
           scala:        "{{ scala }}"
           with_hive:    "true"
           with_pyspark: "true"
+{%- endfor %}
 {%- endfor %}
 {%- endfor %}
 {%- endfor %}
@@ -36,6 +39,7 @@ jobs:
       SPARK_VERSION: "${{ matrix.version.spark }}"
       HADOOP_VERSION: "${{ matrix.version.hadoop }}"
       SCALA_VERSION: "${{ matrix.version.scala }}"
+      JAVA_VERSION: "${{ matrix.version.java }}"
       WITH_HIVE: "${{ matrix.version.with_hive }}"
       WITH_PYSPARK: "${{ matrix.version.with_pyspark }}"
       {%- endraw %}
@@ -44,7 +48,9 @@ jobs:
       uses: actions/setup-java@v2
       with:
         distribution: adopt
-        java-version: '8'
+        {% raw -%}
+        java-version: '${{ matrix.version.java }}'
+        {%- endraw %}
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Install tera-cli
