@@ -63,12 +63,12 @@ if [[ ${SPARK_MAJOR_VERSION} -eq 2 && ${SPARK_MINOR_VERSION} -eq 4 ]]; then  # 2
     DOCKERFILE_BASE="../overrides/base/2.4.z/Dockerfile"
     DOCKERFILE_PY="../overrides/python/2.4.z/Dockerfile"
 else
-    DOCKERFILE_BASE="./dist/kubernetes/dockerfiles/Dockerfile"
-    DOCKERFILE_PY="./dist/kubernetes/dockerfiles/spark/bindings/python/Dockerfile"
+    DOCKERFILE_BASE="./resource-managers/kubernetes/docker/src/main/dockerfiles/spark/Dockerfile"
+    DOCKERFILE_PY="./resource-managers/kubernetes/docker/src/main/dockerfiles/spark/bindings/python/Dockerfile"
 fi
 
 # Temporarily remove R build due to keyserver issue
-# DOCKERFILE_R="./dist/kubernetes/dockerfiles/spark/bindings/R/Dockerfile"
+# DOCKERFILE_R="./resource-managers/kubernetes/docker/src/main/dockerfiles/R/Dockerfile"
 
 SPARK_LABEL="${SPARK_VERSION}"
 TAG_NAME="${SELF_VERSION}_${SPARK_LABEL}_hadoop-${HADOOP_VERSION}_scala-${SCALA_VERSION}_java-${JAVA_VERSION}"
