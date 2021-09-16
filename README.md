@@ -9,21 +9,27 @@ sset-up.
 The current set-up builds for the following Spark versions with Kubernetes on
 Debian:
 
-- `3.1.1`
-- `3.0.2`
-- `3.0.1`
-- `3.0.0`
-- `2.4.7`
+- `3.1.2`
+- `3.0.3`
+- `2.4.8`
 
 ## Note
 
+(R builds are temporarily suspended due to keyserver issues at current time.)
+
 All the build images here are Debian based as the official Spark repository now
-uses `openjdk:8-jdk-slim` as the base image for Kubernetes build.
+uses `openjdk:<java>-jdk-slim-buster` as the base image for Kubernetes build.
+Because currently the official Dockerfiles do not pin the Debian distribution,
+they are incorrectly using the latest Debian `bullseye`, which does not have
+support for Python 2, and its Python 3.9 do not work well with PySpark.
+
+Hence some Dockerfile overrides are in-place to make sure that Spark 2 builds
+can still work.
 
 Because of the fast-changing nature of the Spark repository, this set-up might
 contain inevitable breaking changes. As such, the build Docker images are
 additionally tagged with this repository distribution tag version as prefix,
-such as `v2_2.4.5_hadoop-3.1.0_scala-2.12`.
+such as `v3_3.1.2_hadoop-3.2.0_scala-2.12_java_11`.
 
 The older distribution tag version will separately go into a different Git
 branch for clarity.

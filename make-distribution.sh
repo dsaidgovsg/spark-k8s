@@ -29,8 +29,10 @@ HADOOP_OVERRIDE_FLAG="yes"
 ./dev/change-scala-version.sh "${SCALA_VERSION}"
 # TERM issue: https://github.com/lihaoyi/mill/issues/139#issuecomment-366818171
 TERM=xterm-color ./dev/make-distribution.sh \
-    ${PYSPARK_INSTALL_FLAG:+"--pip"} --name "${SPARK_VERSION}_hadoop-${HADOOP_VERSION}_scala-${SCALA_VERSION}" \
+    ${PYSPARK_INSTALL_FLAG:+"--pip"} \
+    --name "${SPARK_VERSION}_hadoop-${HADOOP_VERSION}_scala-${SCALA_VERSION}_java-${JAVA_VERSION}" \
     -Pscala-${SCALA_VERSION} \
+    -Djava.version=${JAVA_VERSION} \
     "-Phadoop-$(echo "${HADOOP_VERSION}" | cut -d '.' -f1,2)" \
     -Phadoop-cloud \
     ${HADOOP_OVERRIDE_FLAG:+"-Dhadoop.version=${HADOOP_VERSION}"} \
@@ -52,31 +54,44 @@ if [[ "${WITH_HIVE}" = "true" ]] && [[ "${SPARK_MAJOR_VERSION}" -eq 2 ]] && [[ "
     cp "${TARGET_JAR_PATH}" "dist/jars/"
 fi
 
-GIT_REV="$(git rev-parse HEAD | cut -c 1-7)"
-SPARK_LABEL="${SPARK_VERSION}"
+SPARK_MAJOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f1)"
+SPARK_MINOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f2)"
 
-TAG_NAME="${SELF_VERSION}_${SPARK_LABEL}_hadoop-${HADOOP_VERSION}_scala-${SCALA_VERSION}"
+if [[ ${SPARK_MAJOR_VERSION} -eq 2 && ${SPARK_MINOR_VERSION} -eq 4 ]]; then  # 2.4.z
+    # Same Dockerfiles as Spark v2.4.8, but allow override of base image to use Debian Buster
+    # and not using PYTHONENV and instead copies pyspark out like Spark 3.y.z
+    DOCKERFILE_BASE="../overrides/base/2.4.z/Dockerfile"
+    DOCKERFILE_PY="../overrides/python/2.4.z/Dockerfile"
+else
+    DOCKERFILE_BASE="./resource-managers/kubernetes/docker/src/main/dockerfiles/spark/Dockerfile"
+    DOCKERFILE_PY="./resource-managers/kubernetes/docker/src/main/dockerfiles/spark/bindings/python/Dockerfile"
+fi
+
+# Temporarily remove R build due to keyserver issue
+# DOCKERFILE_R="./resource-managers/kubernetes/docker/src/main/dockerfiles/R/Dockerfile"
+
+SPARK_LABEL="${SPARK_VERSION}"
+TAG_NAME="${SELF_VERSION}_${SPARK_LABEL}_hadoop-${HADOOP_VERSION}_scala-${SCALA_VERSION}_java-${JAVA_VERSION}"
+
+# ./bin/docker-image-tool.sh \
+#     -b java_image_tag=${JAVA_VERSION}-jre-slim-buster \
+#     -r "${IMAGE_NAME}" \
+#     -t "${TAG_NAME}" \
+#     -f "${DOCKERFILE_BASE}" \
+#     -p "${DOCKERFILE_PY}" \
+#     -R "${DOCKERFILE_R}" \
+#     build
 
 ./bin/docker-image-tool.sh \
+    -b java_image_tag=${JAVA_VERSION}-jre-slim-buster \
     -r "${IMAGE_NAME}" \
     -t "${TAG_NAME}" \
-    -p "./dist/kubernetes/dockerfiles/spark/bindings/python/Dockerfile" \
-    -R "./dist/kubernetes/dockerfiles/spark/bindings/R/Dockerfile" \
+    -f "${DOCKERFILE_BASE}" \
+    -p "${DOCKERFILE_PY}" \
     build
 
 docker tag "${IMAGE_NAME}/spark:${TAG_NAME}" "${IMAGE_NAME}:${TAG_NAME}"
 docker tag "${IMAGE_NAME}/spark-py:${TAG_NAME}" "${IMAGE_NAME}-py:${TAG_NAME}"
-docker tag "${IMAGE_NAME}/spark-r:${TAG_NAME}" "${IMAGE_NAME}-r:${TAG_NAME}"
+# docker tag "${IMAGE_NAME}/spark-r:${TAG_NAME}" "${IMAGE_NAME}-r:${TAG_NAME}"
 
 popd >/dev/null
-
-# Spark 2.4 builds are silly and don't include spark/python/pyspark contents
-# So manually include them
-SPARK_MAJOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f1)"
-SPARK_MINOR_VERSION="$(echo "${SPARK_VERSION}" | cut -d '.' -f2)"
-
-if [[ "${SPARK_VERSION}" != "master" ]] && [[ ${SPARK_MAJOR_VERSION} -eq 2 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >= 2.4
-    docker build . -f Dockerfile-py -t "${IMAGE_NAME}-py:${TAG_NAME}" \
-        --build-arg "IMAGE_NAME=${IMAGE_NAME}" \
-        --build-arg "TAG_NAME=${TAG_NAME}"
-fi

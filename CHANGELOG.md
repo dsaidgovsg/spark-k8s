@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v3
+
+- (Temporarily drop support for R due to keyserver issues)
+- Only supports for for 2.4.8, 3.0.3, 3.1.2.
+- Supports both Java 8 and 11 for Spark 3 builds.
+
 ## v2
 
 - Add support up to 3.1.1 for Spark 3.y.z.
