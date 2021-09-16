@@ -25,7 +25,7 @@ docker tag "${IMAGE_NAME}-py:${TAG_NAME}" "${IMAGE_ORG}/${IMAGE_NAME}-py:${ALT_T
 docker push "${IMAGE_ORG}/${IMAGE_NAME}-py:${ALT_TAG_NAME}"
 
 # R image push
-docker tag "${IMAGE_NAME}-r:${TAG_NAME}" "${IMAGE_ORG}/${IMAGE_NAME}-r:${TAG_NAME}"
-docker push "${IMAGE_ORG}/${IMAGE_NAME}-r:${TAG_NAME}"
-docker tag "${IMAGE_NAME}-r:${TAG_NAME}" "${IMAGE_ORG}/${IMAGE_NAME}-r:${ALT_TAG_NAME}"
-docker push "${IMAGE_ORG}/${IMAGE_NAME}-r:${ALT_TAG_NAME}"
+# docker tag "${IMAGE_NAME}-r:${TAG_NAME}" "${IMAGE_ORG}/${IMAGE_NAME}-r:${TAG_NAME}"
+# docker push "${IMAGE_ORG}/${IMAGE_NAME}-r:${TAG_NAME}"
+# docker tag "${IMAGE_NAME}-r:${TAG_NAME}" "${IMAGE_ORG}/${IMAGE_NAME}-r:${ALT_TAG_NAME}"
+# docker push "${IMAGE_ORG}/${IMAGE_NAME}-r:${ALT_TAG_NAME}"
