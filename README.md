@@ -15,8 +15,16 @@ Debian:
 
 ## Note
 
+(R builds are temporarily suspended due to keyserver issues at current time.)
+
 All the build images here are Debian based as the official Spark repository now
-uses `openjdk:8-jdk-slim` as the base image for Kubernetes build.
+uses `openjdk:<java>-jdk-slim-buster` as the base image for Kubernetes build.
+Because currently the official Dockerfiles do not pin the Debian distribution,
+they are incorrectly using the latest Debian `bullseye`, which does not have
+support for Python 2, and its Python 3.9 do not work well with PySpark.
+
+Hence some Dockerfile overrides are in-place to make sure that Spark 2 builds
+can still work.
 
 Because of the fast-changing nature of the Spark repository, this set-up might
 contain inevitable breaking changes. As such, the build Docker images are
