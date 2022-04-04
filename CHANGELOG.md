@@ -3,7 +3,7 @@
 ## v3
 
 - (Temporarily drop support for R due to keyserver issues)
-- Only supports for for 2.4.8, 3.0.3, 3.1.2.
+- Only supports for for 3.0.3, 3.1.3, 3.2.1 (dropped 2.4.8).
 - Supports both Java 8 and 11 for Spark 3 builds.
 
 ## v2
