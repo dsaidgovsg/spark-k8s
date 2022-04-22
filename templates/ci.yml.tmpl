@@ -71,7 +71,7 @@ jobs:
     - name: Install setuptools and wheel
       run: python3 -m pip install setuptools wheel
     - name: Build Docker image
-      run: bash make-distribution.sh
+      run: MAVEN_OPTS="-Xss2M" bash make-distribution.sh
     - name: Push Docker image
       run: bash push-images.sh
       env:
