@@ -9,9 +9,9 @@ sset-up.
 The current set-up builds for the following Spark versions with Kubernetes on
 Debian:
 
-- `3.1.2`
+- `3.2.1`
+- `3.1.3`
 - `3.0.3`
-- `2.4.8`
 
 ## Note
 
