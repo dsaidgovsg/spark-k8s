@@ -6,7 +6,7 @@ versions:
   hadoop: ['2.7.4', '3.2.0']
   scala:  ['2.12']
 
-- spark:  ['3.2.1']
+- spark:  ['3.2.2']
   java:   ['8', '11']
   hadoop: ['3.3.1']
   scala:  ['2.12', '2.13']
