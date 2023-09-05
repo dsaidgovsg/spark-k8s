@@ -3,8 +3,9 @@
 ## v3
 
 - (Temporarily drop support for R due to keyserver issues)
-- Only supports for for 3.1.3, 3.2.2, 3.3.0 (dropped 2.4.8).
+- Only supports for for 3.1.3, 3.2.2, 3.3.0, 3.4.0 (dropped 2.4.8).
 - Supports both Java 8 and 11 for Spark 3 builds.
+- Add Ubuntu-based image since the migration to eclipse-temurin for jre image source.
 
 ## v2
 
