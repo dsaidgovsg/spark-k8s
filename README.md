@@ -20,8 +20,7 @@ Debian:
 
 Build image for Spark 3.4.1 is Ubuntu based because openjdk is deprecated and
 going forward the official Spark repository uses `eclipse-temurin:<java>-jre`
-where slim variants of jre images are not available at the moment. As such
-the alpine version will be used instead.
+where slim variants of jre images are not available at the moment.
 
 All the build images with Spark before v3.4.0 are Debian based as the official 
 Spark repository now uses `openjdk:<java>-jre-slim-buster` as the base image 
