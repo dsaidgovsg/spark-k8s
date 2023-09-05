@@ -12,13 +12,13 @@ Debian:
 - `3.3.0`
 - `3.2.2`
 - `3.1.3`
-- `3.4.0`
+- `3.4.1`
 
 ## Note
 
 (R builds are temporarily suspended due to keyserver issues at current time.)
 
-Build image for Spark 3.4.0 is Ubuntu based because openjdk is deprecated and
+Build image for Spark 3.4.1 is Ubuntu based because openjdk is deprecated and
 going forward the official Spark repository uses `eclipse-temurin:<java>-jre`
 where slim variants of jre images are not available at the moment.
 
