@@ -19,4 +19,4 @@ versions:
 - spark:  ['3.4.0']
   java:   ['8', '11']
   hadoop: ['3.3.4']
-  scala:  ['2.14']
+  scala:  ['2.12', '2.13']
