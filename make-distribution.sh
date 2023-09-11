@@ -67,6 +67,15 @@ else
     DOCKERFILE_PY="./resource-managers/kubernetes/docker/src/main/dockerfiles/spark/bindings/python/Dockerfile"
 fi
 
+if [[ ${SPARK_MAJOR_VERSION} -eq 3 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >=3.4
+    # From Spark v3.4.0 onwards, openjdk is not the prefered base image source as it i
+    # deprecated and taken over by eclipse-temurin. slim-buster variants are not available
+    # on eclipse-temurin at the moment.
+    IMAGE_VARIANT="jre"
+else
+    IMAGE_VARIANT="jre-slim-buster"
+fi
+
 # Temporarily remove R build due to keyserver issue
 # DOCKERFILE_R="./resource-managers/kubernetes/docker/src/main/dockerfiles/R/Dockerfile"
 
@@ -83,7 +92,7 @@ TAG_NAME="${SELF_VERSION}_${SPARK_LABEL}_hadoop-${HADOOP_VERSION}_scala-${SCALA_
 #     build
 
 ./bin/docker-image-tool.sh \
-    -b java_image_tag=${JAVA_VERSION}-jre-slim-buster \
+    -b java_image_tag=${JAVA_VERSION}-${IMAGE_VARIANT} \
     -r "${IMAGE_NAME}" \
     -t "${TAG_NAME}" \
     -f "${DOCKERFILE_BASE}" \
