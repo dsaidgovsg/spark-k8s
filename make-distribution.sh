@@ -71,7 +71,7 @@ if [[ ${SPARK_MAJOR_VERSION} -eq 3 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >
     # From Spark v3.4.0 onwards, openjdk is not the prefered base image source as it i
     # deprecated and taken over by eclipse-temurin. slim-buster variants are not available
     # on eclipse-temurin at the moment.
-    IMAGE_VARIANT="jre"
+    IMAGE_VARIANT="jre-ubi9-minimal"
 else
     IMAGE_VARIANT="jre-slim-buster"
 fi
@@ -99,8 +99,8 @@ TAG_NAME="${SELF_VERSION}_${SPARK_LABEL}_hadoop-${HADOOP_VERSION}_scala-${SCALA_
     -p "${DOCKERFILE_PY}" \
     build
 
-docker tag "${IMAGE_NAME}/spark:${TAG_NAME}" "${IMAGE_NAME}:${TAG_NAME}"
-docker tag "${IMAGE_NAME}/spark-py:${TAG_NAME}" "${IMAGE_NAME}-py:${TAG_NAME}"
+docker tag "${IMAGE_NAME}/spark:${TAG_NAME}" "${IMAGE_NAME}:${TAG_NAME}-minimal"
+docker tag "${IMAGE_NAME}/spark-py:${TAG_NAME}" "${IMAGE_NAME}-py:${TAG_NAME}-minimal"
 # docker tag "${IMAGE_NAME}/spark-r:${TAG_NAME}" "${IMAGE_NAME}-r:${TAG_NAME}"
 
 popd >/dev/null
