@@ -1,7 +1,6 @@
 self_version: 'v4'
 
 versions:
-
 - spark:  ['3.4.1']
   java:   ['8', '11']
   hadoop: ['3.3.4']
