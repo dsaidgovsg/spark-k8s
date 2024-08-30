@@ -13,16 +13,16 @@ fi
 TAG_NAME="${SELF_VERSION}_${SPARK_LABEL}_hadoop-${HADOOP_VERSION}_scala-${SCALA_VERSION}_java-${JAVA_VERSION}"
 ALT_TAG_NAME="${SPARK_LABEL}_hadoop-${HADOOP_VERSION}_scala-${SCALA_VERSION}_java-${JAVA_VERSION}"
 
-docker tag "${IMAGE_NAME}:${TAG_NAME}" "${IMAGE_ORG}/${IMAGE_NAME}:${TAG_NAME}"
-docker push "${IMAGE_ORG}/${IMAGE_NAME}:${TAG_NAME}"
-docker tag "${IMAGE_NAME}:${TAG_NAME}" "${IMAGE_ORG}/${IMAGE_NAME}:${ALT_TAG_NAME}"
-docker push "${IMAGE_ORG}/${IMAGE_NAME}:${ALT_TAG_NAME}"
+docker tag "test_${IMAGE_NAME}:${TAG_NAME}" "test_${IMAGE_ORG}/${IMAGE_NAME}:${TAG_NAME}"
+docker push "test_${IMAGE_ORG}/${IMAGE_NAME}:${TAG_NAME}"
+docker tag "test_${IMAGE_NAME}:${TAG_NAME}" "test_${IMAGE_ORG}/${IMAGE_NAME}:${ALT_TAG_NAME}"
+docker push "test_${IMAGE_ORG}/${IMAGE_NAME}:${ALT_TAG_NAME}"
 
 # Python image push
-docker tag "${IMAGE_NAME}-py:${TAG_NAME}" "${IMAGE_ORG}/${IMAGE_NAME}-py:${TAG_NAME}"
-docker push "${IMAGE_ORG}/${IMAGE_NAME}-py:${TAG_NAME}"
-docker tag "${IMAGE_NAME}-py:${TAG_NAME}" "${IMAGE_ORG}/${IMAGE_NAME}-py:${ALT_TAG_NAME}"
-docker push "${IMAGE_ORG}/${IMAGE_NAME}-py:${ALT_TAG_NAME}"
+docker tag "test_${IMAGE_NAME}-py:${TAG_NAME}" "test_${IMAGE_ORG}/${IMAGE_NAME}-py:${TAG_NAME}"
+docker push "test_${IMAGE_ORG}/${IMAGE_NAME}-py:${TAG_NAME}"
+docker tag "test_${IMAGE_NAME}-py:${TAG_NAME}" "test_${IMAGE_ORG}/${IMAGE_NAME}-py:${ALT_TAG_NAME}"
+docker push "test_${IMAGE_ORG}/${IMAGE_NAME}-py:${ALT_TAG_NAME}"
 
 # R image push
 # docker tag "${IMAGE_NAME}-r:${TAG_NAME}" "${IMAGE_ORG}/${IMAGE_NAME}-r:${TAG_NAME}"
