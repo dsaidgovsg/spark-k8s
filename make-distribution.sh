@@ -13,7 +13,7 @@ if [[ ! -d "spark" ]]; then
     git clone https://github.com/apache/spark.git -b "${SPARK_VERSION_TAG}"
 else
     pushd spark >/dev/null
-    git reset --hard
+    # git reset --hard
     git fetch
     git checkout "${SPARK_VERSION_TAG}"
     popd >/dev/null
@@ -53,7 +53,7 @@ TAG_NAME="${SELF_VERSION}_${SPARK_LABEL}_hadoop-${HADOOP_VERSION}_scala-${SCALA_
     -b java_image_tag=${JAVA_VERSION}-${IMAGE_VARIANT} \
     -r "${IMAGE_NAME}" \
     -t "${TAG_NAME}" \
-    -f "${DOCKERFILE_BASE}" \
+    # -f "${DOCKERFILE_BASE}" \
     -p "${DOCKERFILE_PY}" \
     build
 

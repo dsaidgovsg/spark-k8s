@@ -16,6 +16,10 @@ Debian:
 
 ## Note
 
+Major Revamp to `make-distribution.sh`
+
+### Deprecated Notes
+
 (R builds are temporarily suspended due to keyserver issues at current time.)
 
 Build image for Spark 3.4.1 is Ubuntu based because openjdk is deprecated and
