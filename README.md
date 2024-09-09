@@ -13,24 +13,21 @@ Debian:
 - `3.2.2`
 - `3.1.3`
 - `3.4.1`
+- `3.5.1`
 
-## Note
-
-Major Revamp to `make-distribution.sh`
-
-### Deprecated Notes
+## Notes
 
 (R builds are temporarily suspended due to keyserver issues at current time.)
 
-Build image for Spark 3.4.1 is Ubuntu based because openjdk is deprecated and
-going forward the official Spark repository uses `eclipse-temurin:<java>-jre`
+Build image for Spark 3.4.1/3.5.1 is Ubuntu based because openjdk is deprecated and
+going forward the official Spark repository uses `eclipse-temurin:<java>-jre-focal`
 where slim variants of jre images are not available at the moment.
 
 All the build images with Spark before v3.4.0 are Debian based as the official 
 Spark repository now uses `openjdk:<java>-jre-slim-buster` as the base image 
 for Kubernetes build. Because currently the official Dockerfiles do not pin 
 the Debian distribution, they are incorrectly using the latest Debian `bullseye`,
-which does not have support for Python 2, and its Python 3.9 do not work well 
+which does not have support for Python 2, and its Python 3.9 do not work well
 with PySpark.
 
 Hence some Dockerfile overrides are in-place to make sure that Spark 2 builds
@@ -52,11 +49,11 @@ For quick testing of local build, you should do the following commands:
 
 ```bash
 export IMAGE_NAME=spark-k8s
-export SELF_VERSION="v3"
+export SELF_VERSION="v4"
 export SCALA_VERSION="2.12"
-export SPARK_VERSION="3.3.0"
-export HADOOP_VERSION="3.3.2"
-export JAVA_VERSION="11"
+export SPARK_VERSION="3.5.1"
+export HADOOP_VERSION="3.3.6"
+export JAVA_VERSION="17"
 export WITH_HIVE="true"
 export WITH_PYSPARK="true"
 bash make-distribution.sh
