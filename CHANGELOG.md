@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v4
+- Drop support for all Spark version less than 2.y.z
+- Add Spark 3.5.1
+- Add Hadoop 3.3.6
+- Add support for Java 17 for Spark 3.5.1
+- Fix Ubuntu-based images to use `jre-focal` variant instead of `jre` which was recently upgraded to Ubuntu Jammy to v22.y.z and causing system level python package installation to fail due to [PEP 668](https://issues.apache.org/jira/browse/SPARK-49068)
+- Remove docker tags without self version
+
 ## v3
 
 - (Temporarily drop support for R due to keyserver issues)

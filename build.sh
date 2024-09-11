@@ -1,9 +1,9 @@
 export IMAGE_NAME=spark-k8s
-export SELF_VERSION="v3"
+export SELF_VERSION="v4"
 export SCALA_VERSION="2.12"
-export SPARK_VERSION="3.3.0"
-export HADOOP_VERSION="3.3.2"
-export JAVA_VERSION="11"
+export SPARK_VERSION="3.5.2"
+export HADOOP_VERSION="3.3.6"
+export JAVA_VERSION="8"
 export WITH_HIVE="true"
 export WITH_PYSPARK="true"
 bash make-distribution.sh
