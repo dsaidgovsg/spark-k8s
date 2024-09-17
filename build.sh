@@ -1,7 +1,7 @@
 export IMAGE_NAME=spark-k8s
 export SELF_VERSION="v4"
 export SCALA_VERSION="2.12"
-export SPARK_VERSION="3.5.2"
+export SPARK_VERSION="3.5.1"
 export HADOOP_VERSION="3.3.6"
 export JAVA_VERSION="8"
 export WITH_HIVE="true"

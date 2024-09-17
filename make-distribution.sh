@@ -51,7 +51,7 @@ if [[ ${SPARK_MAJOR_VERSION} -eq 3 && ${SPARK_MINOR_VERSION} -ge 4 ]]; then  # >
     # From Spark v3.4.0 onwards, openjdk is not the prefered base image source as it i
     # deprecated and taken over by eclipse-temurin. slim-buster variants are not available
     # on eclipse-temurin at the moment.
-    IMAGE_VARIANT="jre-focal"
+    IMAGE_VARIANT="jre-jammy"
 else
     IMAGE_VARIANT="jre-slim-buster"
 fi
